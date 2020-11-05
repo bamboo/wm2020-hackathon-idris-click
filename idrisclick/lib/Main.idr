@@ -5,9 +5,6 @@ import FlutterMidi
 import Widgets.Ticking
 import Performance
 
-inMilliseconds : Duration -> Int
-inMilliseconds = (`getField` "inMilliseconds")
-
 data ClickState
   = Idle
   | Starting
