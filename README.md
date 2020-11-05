@@ -2,6 +2,8 @@
 
 ## Building
 
+The app is located in the idrisclick directory. cd into that directory and continue there with:
+
 Build `lib/main.dart` with:
 
     $ idris2dart --build idrisclick.ipkg
