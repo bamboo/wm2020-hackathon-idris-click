@@ -70,7 +70,7 @@ appHome midi = Ticking.new [onTick @= tick, onBuild @= build, initialState @= de
               value @= cast (get state).bpm,
               min @= 20,
               max @= 240,
-              onChanged @= \bpm' => modify state (record { bpm = cast bpm' })
+              onChanged @= \value => modify state (record { bpm = cast value })
             ])
           ])
         ])
