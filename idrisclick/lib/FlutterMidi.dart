@@ -6,8 +6,8 @@ class FlutterMidi {
 
   FlutterMidi() {
     rootBundle
-        .load("assets/Piano.sf2")
-        .then((bytes) => _midi.prepare(sf2: bytes, name: "Piano.sf2"));
+        .load("assets/weedsgm3.sf2")
+        .then((bytes) => _midi.prepare(sf2: bytes, name: "weedsgm3.sf2"));
   }
 
   void playMidiNote(int midiNote) {
