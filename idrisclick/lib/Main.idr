@@ -35,19 +35,19 @@ appHome midi = Stateful.new [initialState @= 0, onBuild @= build]
       ])
     ]
 
-app : FlutterMidi -> IO Stateless
-app midi = Stateless.new [onBuild @= build]
+app : IO Stateless
+app = Stateless.new [onBuild @= build]
   where
     build : BuildContext -> IO Widget
-    build _ = upcast <$> MaterialApp.new [
-      title @= appTitle,
-      home @=> !(appHome midi),
-      theme @= !(ThemeData.new [
-        primarySwatch @= Colors.blue
-      ])
-    ]
+    build _ = do
+      midi <- FlutterMidi.new
+      upcast <$> MaterialApp.new [
+        title @= appTitle,
+        home @=> !(appHome midi),
+        theme @= !(ThemeData.new [
+          primarySwatch @= Colors.blue
+        ])
+      ]
 
 main : IO ()
-main = do
-  midi <- FlutterMidi.new
-  runApp !(app midi)
+main = runApp !app
