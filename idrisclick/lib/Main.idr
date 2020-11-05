@@ -29,6 +29,10 @@ appTitle = "Idris Click"
 moreCowbell : FlutterMidi -> IO ()
 moreCowbell midi = writeMidiEvent midi 0x90 9 56 127 -- Cowbell
 
+iconFor : ClickState -> IconData
+iconFor Idle = Icons.play_arrow
+iconFor _ = Icons.stop
+
 appHome : FlutterMidi -> IO Ticking
 appHome midi = Ticking.new [onTick @= tick, onBuild @= build, initialState @= defaultAppState]
   where
@@ -73,7 +77,7 @@ appHome midi = Ticking.new [onTick @= tick, onBuild @= build, initialState @= de
       ]),
       floatingActionButton @=> !(FloatingActionButton.new [
         tooltip @= "Increment",
-        child @=> !(Icon.new Icons.play_arrow []),
+        child @=> !(Icon.new (iconFor (get state).clickState) []),
         onPressed @= modify state onPlay
       ])
     ]
