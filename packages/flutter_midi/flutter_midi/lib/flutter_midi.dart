@@ -68,4 +68,20 @@ class FlutterMidi extends FlutterMidiPlatform {
   }) async {
     return await _channel.invokeMethod('play_midi_note', {"note": midi});
   }
+
+  /// Sends a complete midi event to the controller.
+  @override
+  Future<String> writeMidiEvent({
+    @required int command,
+    @required int channel,
+    @required int note,
+    @required int velocity,
+  }) async {
+    return await _channel.invokeMethod('write_midi_event', {
+      "command": command,
+      "channel": channel,
+      "velocity": velocity,
+      "note": note
+    });
+  }
 }
