@@ -22,7 +22,6 @@ appHome midi = Timer.new [onBuild @= build]
         child @=> !(Column.new [
           mainAxisAlignment @= MainAxisAlignment.center,
           children @= !(widgets [
-            !(Text.new "You have pushed the button this many times:" []),
             !(Text.new (show (state)) [
               style @= headline4 (textTheme !(Theme.of_ context))
             ])
