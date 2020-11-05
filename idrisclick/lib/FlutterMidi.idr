@@ -1,20 +1,21 @@
 module FlutterMidi
 
--- import Dart.FFI
+import Dart.FFI
 
--- public export 
--- FlutterMidi : Type
--- FlutterMidi = Struct "FlutterMidi,package:flutter_midi/flutter_midi.dart" []
+%inline
+public export
+FlutterMidi : Type
+FlutterMidi = Struct "FlutterMidi,./FlutterMidi.dart" []
 
--- namespace FlutterMidi
---   %inline
---   public export
---   new : IO FlutterMidi
---   new = primIO $ prim__dart_new {named = Void} FlutterMidi [] []
+namespace FlutterMidi
+  %inline
+  public export
+  new : IO FlutterMidi
+  new = primIO $ prim__dart_new FlutterMidi [] (the (Parameters {tag = Void} []) [])
 
---@override
---Future<String> playMidiNote (
---    {@required int midi}
---)
--- override
--- FlutterMidi() 
+  %foreign "Dart:.playMidiNote"
+  prim__playMidiNote : FlutterMidi -> Int -> PrimIO ()
+
+  export
+  playMidiNote : FlutterMidi -> Int -> IO ()
+  playMidiNote flutterMidi midiNote = primIO $ prim__playMidiNote flutterMidi midiNote

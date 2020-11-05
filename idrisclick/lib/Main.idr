@@ -1,12 +1,16 @@
 module Main
 
 import Flutter
+import FlutterMidi
 
 appTitle : String
 appTitle = "Idris Click"
 
-appHome : IO Stateful
-appHome = Stateful.new [initialState @= 0, onBuild @= build]
+click : FlutterMidi -> IO ()
+click midi = playMidiNote midi 60
+
+appHome : FlutterMidi -> IO Stateful
+appHome midi = Stateful.new [initialState @= 0, onBuild @= build]
   where
     build : StatefulWidgetState Int -> BuildContext -> IO Widget
     build state context = upcast <$> Scaffold.new [
@@ -27,21 +31,23 @@ appHome = Stateful.new [initialState @= 0, onBuild @= build]
       floatingActionButton @=> !(FloatingActionButton.new [
         tooltip @= "Increment",
         child @=> !(Icon.new Icons.play_arrow []),
-        onPressed @= modify state (+ 1)
+        onPressed @= click midi
       ])
     ]
 
-app : IO Stateless
-app = Stateless.new [onBuild @= build]
+app : FlutterMidi -> IO Stateless
+app midi = Stateless.new [onBuild @= build]
   where
     build : BuildContext -> IO Widget
     build _ = upcast <$> MaterialApp.new [
       title @= appTitle,
-      home @=> !appHome,
+      home @=> !(appHome midi),
       theme @= !(ThemeData.new [
         primarySwatch @= Colors.blue
       ])
     ]
 
 main : IO ()
-main = runApp !app
+main = do
+  midi <- FlutterMidi.new
+  runApp !(app midi)
