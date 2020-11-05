@@ -2,6 +2,7 @@ module Main
 
 import Flutter
 import FlutterMidi
+import Timer
 
 appTitle : String
 appTitle = "Idris Click"
@@ -9,10 +10,10 @@ appTitle = "Idris Click"
 click : FlutterMidi -> IO ()
 click midi = playMidiNote midi 60
 
-appHome : FlutterMidi -> IO Stateful
-appHome midi = Stateful.new [initialState @= 0, onBuild @= build]
+appHome : FlutterMidi -> IO Timer
+appHome midi = Timer.new [onBuild @= build]
   where
-    build : StatefulWidgetState Int -> BuildContext -> IO Widget
+    build : Double -> BuildContext -> IO Widget
     build state context = upcast <$> Scaffold.new [
       appBar @=> !(AppBar.new [
         title @=> !(Text.new appTitle [])
@@ -22,7 +23,7 @@ appHome midi = Stateful.new [initialState @= 0, onBuild @= build]
           mainAxisAlignment @= MainAxisAlignment.center,
           children @= !(widgets [
             !(Text.new "You have pushed the button this many times:" []),
-            !(Text.new (show (get state)) [
+            !(Text.new (show (state)) [
               style @= headline4 (textTheme !(Theme.of_ context))
             ])
           ])

@@ -1,7 +1,7 @@
 package idrisclick
 
 main = Main
-modules = Main, FlutterMidi
+modules = Main, FlutterMidi, Performance, Timer
 depends = contrib, flutter, dart-ffi
 sourcedir = "lib"
 executable = "lib/main.dart"
