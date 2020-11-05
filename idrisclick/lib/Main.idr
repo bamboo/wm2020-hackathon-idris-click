@@ -2,7 +2,12 @@ module Main
 
 import Flutter
 import FlutterMidi
-import Timer
+import Widgets.Ticking
+
+data State = Idle
+
+Show State where
+  show Idle = "idle"
 
 appTitle : String
 appTitle = "Idris Click"
@@ -10,10 +15,13 @@ appTitle = "Idris Click"
 click : FlutterMidi -> IO ()
 click midi = writeMidiEvent midi 0x90 9 56 127 -- Cowbell
 
-appHome : FlutterMidi -> IO Timer
-appHome midi = Timer.new [onBuild @= build]
+appHome : FlutterMidi -> IO Ticking
+appHome midi = Ticking.new [onTick @= tick, onBuild @= build, initialState @= Idle]
   where
-    build : Double -> BuildContext -> IO Widget
+    tick : Duration -> State -> IO (Maybe State)
+    tick elapsed state = pure Nothing
+
+    build : TickingWidgetState State -> BuildContext -> IO Widget
     build state context = upcast <$> Scaffold.new [
       appBar @=> !(AppBar.new [
         title @=> !(Text.new appTitle [])
@@ -22,7 +30,7 @@ appHome midi = Timer.new [onBuild @= build]
         child @=> !(Column.new [
           mainAxisAlignment @= MainAxisAlignment.center,
           children @= !(widgets [
-            !(Text.new (show (state)) [
+            !(Text.new (show (get state)) [
               style @= headline4 (textTheme !(Theme.of_ context))
             ])
           ])
