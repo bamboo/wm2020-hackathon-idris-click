@@ -16,7 +16,7 @@ record Click where
 
 export
 startPerformance : Bpm -> Time -> Click
-startPerformance bpm time = MkClick time (cast (60.0 * 1000 / cast bpm))
+startPerformance bpm time = MkClick (time + 150) (cast (60.0 * 1000 / cast bpm))
 
 export
 step : Time -> Click -> Maybe Click
