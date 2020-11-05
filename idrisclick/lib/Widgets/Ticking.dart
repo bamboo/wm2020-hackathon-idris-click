@@ -33,12 +33,12 @@ class _TickingState extends State<Ticking> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     ticker = createTicker((elapsed) {
-      final newState = onTick(elapsed, _state);
-      switch ((newState as List)[0] as int) {
+      final newState = onTick(elapsed, _state) as List;
+      switch ((newState)[0] as int) {
         case 1:
           {
             setState(() {
-              _state = newState;
+              _state = newState[1];
             });
             break;
           }

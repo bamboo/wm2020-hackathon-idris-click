@@ -3,23 +3,44 @@ module Main
 import Flutter
 import FlutterMidi
 import Widgets.Ticking
+import Performance
 
-data State = Idle
+inMilliseconds : Duration -> Int
+inMilliseconds = (`getField` "inMilliseconds")
+
+data State
+  = Idle
+  | Starting
+  | Playing Click
 
 Show State where
   show Idle = "idle"
+  show Starting = "starting"
+  show (Playing _) = "playing"
 
 appTitle : String
 appTitle = "Idris Click"
 
-click : FlutterMidi -> IO ()
-click midi = writeMidiEvent midi 0x90 9 56 127 -- Cowbell
+moreCowbell : FlutterMidi -> IO ()
+moreCowbell midi = writeMidiEvent midi 0x90 9 56 127 -- Cowbell
 
 appHome : FlutterMidi -> IO Ticking
 appHome midi = Ticking.new [onTick @= tick, onBuild @= build, initialState @= Idle]
   where
+    onPlay : State -> State
+    onPlay Idle = Starting
+    onPlay _ = Idle
+
     tick : Duration -> State -> IO (Maybe State)
-    tick elapsed state = pure Nothing
+    tick elapsed Idle = pure Nothing
+    tick elapsed Starting =
+      pure (Just (Playing (startPerformance 60 (inMilliseconds elapsed))))
+    tick elapsed (Playing click) =
+      case (step (inMilliseconds elapsed) click) of
+        Just click' => do
+          moreCowbell midi
+          pure (Just (Playing click'))
+        _ => pure Nothing
 
     build : TickingWidgetState State -> BuildContext -> IO Widget
     build state context = upcast <$> Scaffold.new [
@@ -39,7 +60,7 @@ appHome midi = Ticking.new [onTick @= tick, onBuild @= build, initialState @= Id
       floatingActionButton @=> !(FloatingActionButton.new [
         tooltip @= "Increment",
         child @=> !(Icon.new Icons.play_arrow []),
-        onPressed @= click midi
+        onPressed @= modify state onPlay
       ])
     ]
 
