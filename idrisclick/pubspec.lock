@@ -79,9 +79,9 @@ packages:
   flutter_midi:
     dependency: "direct main"
     description:
-      name: flutter_midi
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../packages/flutter_midi/flutter_midi"
+      relative: true
+    source: path
     version: "1.0.2"
   flutter_midi_platform_interface:
     dependency: transitive
