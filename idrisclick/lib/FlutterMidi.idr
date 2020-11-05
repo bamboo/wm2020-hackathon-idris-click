@@ -13,9 +13,10 @@ namespace FlutterMidi
   new : IO FlutterMidi
   new = primIO $ prim__dart_new FlutterMidi [] (the (Parameters {tag = Void} []) [])
 
-  %foreign "Dart:.playMidiNote"
-  prim__playMidiNote : FlutterMidi -> Int -> PrimIO ()
+  %foreign "Dart:.writeMidiEvent"
+  prim__writeMidiEvent : FlutterMidi -> Int -> Int -> Int -> Int -> PrimIO ()
 
   export
-  playMidiNote : FlutterMidi -> Int -> IO ()
-  playMidiNote flutterMidi midiNote = primIO $ prim__playMidiNote flutterMidi midiNote
+  writeMidiEvent : FlutterMidi -> (command : Int) -> (channel : Int) -> (note : Int) -> (velocity : Int) -> IO ()
+  writeMidiEvent flutterMidi command channel note velocity = primIO $ prim__writeMidiEvent flutterMidi command channel note velocity
+

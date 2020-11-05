@@ -8,7 +8,7 @@ appTitle : String
 appTitle = "Idris Click"
 
 click : FlutterMidi -> IO ()
-click midi = playMidiNote midi 60
+click midi = writeMidiEvent midi 0x90 9 56 127 -- Cowbell
 
 appHome : FlutterMidi -> IO Timer
 appHome midi = Timer.new [onBuild @= build]

@@ -10,7 +10,12 @@ class FlutterMidi {
         .then((bytes) => _midi.prepare(sf2: bytes, name: "weedsgm3.sf2"));
   }
 
-  void playMidiNote(int midiNote) {
-    _midi.playMidiNote(midi: midiNote);
+  void writeMidiEvent(int command, int channel, int note, int velocity) {
+    _midi.writeMidiEvent(
+      command: command,
+      channel: channel,
+      note: note,
+      velocity: velocity,
+    );
   }
 }
